@@ -8,18 +8,19 @@ namespace EventConsumer
         static long start;
         static async Task Main(string[] args)
         {
-            var specialOfferSubsriber = new EventSubscriber("http://special-offers:5002");
+            var specialOfferSubsriber = new EventSubscriber("localhost:7241"); // https://localhost:7241 ? http://special-offers:5002
             specialOfferSubsriber.Start();
+            Console.ReadLine();
 
             //////////////////////////////////////////////////////Two different aproachs
 
-            start = await GetStartIdFromDatastore();
-            var end = 100;
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            using var resp = await client.GetAsync(new Uri($"http://special-offers:5002/events?start={start}&end={end}"));
-            await ProcessEvents(await resp.Content.ReadAsStreamAsync());
-            await SaveStartIdToDataStore(start);
+            //start = await GetStartIdFromDatastore();
+            //var end = 100;
+            //var client = new HttpClient();
+            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //using var resp = await client.GetAsync(new Uri($"http://special-offers:5002/events?start={start}&end={end}"));
+            //await ProcessEvents(await resp.Content.ReadAsStreamAsync());
+            //await SaveStartIdToDataStore(start);
         }
 
         // fake implementation. Should get from a real database

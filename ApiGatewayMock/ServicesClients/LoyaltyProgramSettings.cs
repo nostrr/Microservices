@@ -1,10 +1,10 @@
-﻿namespace ApiGatewayMock
+﻿namespace ApiGatewayMock.ServicesClients
 {
     public record LoyaltyProgramSettings()
     {
         public LoyaltyProgramSettings(string[] interests) : this()
         {
-            this.Interests = interests;
+            Interests = interests;
         }
 
         public string[] Interests { get; init; } = Array.Empty<string>();

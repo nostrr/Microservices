@@ -9,6 +9,9 @@ namespace LoyaltyProgram
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddControllers();
+            builder.Services.AddLogging(log => {
+                log.SetMinimumLevel(LogLevel.Trace);
+            });
 
             var app = builder.Build();
 
@@ -22,6 +25,7 @@ namespace LoyaltyProgram
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
 
             app.UseRouting();
           //  app.UseEndpoints(endpoints => endpoints.MapControllers());

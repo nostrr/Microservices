@@ -4,18 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace LoyaltyProgram.Users
 {
     [Route("/users")]
-    //[ApiController]
     public class UsersController : ControllerBase
     {
         private static readonly Dictionary<int, LoyaltyProgramUser> RegisteredUsers = new();
 
+        [HttpGet("fail")]
+        public IActionResult Fail() => throw new NotImplementedException();
+
         [HttpGet("{userId:int}")]
-        public ActionResult<LoyaltyProgramUser> GetUser(int userId)
-        {
-           return RegisteredUsers.ContainsKey(userId) ? 
-                (ActionResult<LoyaltyProgramUser>)Ok(RegisteredUsers[userId]) 
-                : NotFound();
-        }
+        public ActionResult<LoyaltyProgramUser> GetUser(int userId) =>
+            RegisteredUsers.ContainsKey(userId) ?
+            (ActionResult<LoyaltyProgramUser>)Ok(RegisteredUsers[userId])
+            : NotFound();
+       
 
         [HttpPost("")]
         public ActionResult<LoyaltyProgramUser> CreateUser([FromBody] LoyaltyProgramUser user)

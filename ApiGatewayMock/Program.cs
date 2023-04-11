@@ -1,16 +1,52 @@
-﻿using System.Text.Json;
+﻿using ApiGatewayMock.ServicesClients;
+using Microsoft.Extensions.DependencyInjection;
+using Polly;
+using Polly.CircuitBreaker;
+using Polly.Extensions.Http;
+using Polly.Retry;
+using System.Text.Json;
 using static System.Console;
 using static System.Environment;
 namespace ApiGatewayMock
 {
     public class Program
     {
+        private static string _host;
         private static LoyaltyProgramClient _client;
+
+        private static AsyncPolicy<HttpResponseMessage> exponentialRetryPolicy = 
+            Policy<HttpResponseMessage>
+            .Handle<HttpRequestException>()
+            .OrTransientHttpStatusCode()
+            .WaitAndRetryAsync(
+                3,
+                attempt => TimeSpan.FromMilliseconds(100 * Math.Pow(2, attempt)));
+
+        private static AsyncPolicy<HttpResponseMessage> circuitBreakerPolicy =
+          Policy<HttpResponseMessage>
+            .Handle<HttpRequestException>()
+            .OrTransientHttpStatusCode()
+            .CircuitBreakerAsync(5, TimeSpan.FromMinutes(1));
+
+        private static T GetClient<T>() where T : class
+        {
+            var serviceProvider = new ServiceCollection()
+               .AddHttpClient<T>()
+               .AddPolicyHandler(request =>
+                   request.Method == HttpMethod.Get
+                   ? circuitBreakerPolicy
+                   : exponentialRetryPolicy)
+               .ConfigureHttpClient(c => c.BaseAddress = new Uri(_host))
+               .Services
+               .BuildServiceProvider();
+          return  serviceProvider.GetService<T>();
+                
+        }
 
         static async Task Main(string[] args)
         {
-            var host = args.Length > 0 ? args[0] : "https://localhost:7270";
-            _client = new LoyaltyProgramClient(new HttpClient { BaseAddress = new Uri(host) });
+            _host = args.Length > 0 ? args[0] : "https://localhost:7270";
+            _client = GetClient<LoyaltyProgramClient>();
             var proccesCommand = new Dictionary<char, (string description, Func<string, Task<(bool, HttpResponseMessage)>> handler)>
             {
                 {

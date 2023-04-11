@@ -9,15 +9,19 @@ namespace ShoppingCart.ShoppingCart
     {
         private const string CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ShoppingCart;
 Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
         private const string READ_ITEM_SQL = @"select sc.ID, ProductCatalogId, ProductName, ProductDescription, Currency, Amount from ShoppingCart as sc
 join ShoppingCartItem sci on sc.ID = sci.ShoppingCartId
 and sc.UserId=@UserId";
+
         private const string INSERT_SHOPPING_CART_SQL =
            @"insert into ShoppingCart (UserId) OUTPUT inserted.ID VALUES (@UserId)";
+
         private const string DELETE_ALL_FOR_SHOPPING_CART_SQL =
             @"delete item from ShoppingCartItem item
 inner join ShoppingCart cart on item.ShoppingCartId = cart.ID
 and cart.UserId=@UserId";
+
         private const string ADD_ALL_FOR_SHOPPING_CART_SQL =
            @"insert into ShoppingCartItem
 (ShoppingCartId, ProductCatalogId, ProductName,
@@ -25,6 +29,7 @@ ProductDescription, Amount, Currency)
 values
 (@ShoppingCartId, @ProductCatalogueId, @ProductName,
 @ProductDescription, @Amount, @Currency)";
+
         public async Task<ShoppingCart> Get(int userId)
         {
             await using var conn = new SqlConnection(CONNECTION_STRING);
