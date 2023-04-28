@@ -1,6 +1,10 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Polly;
+using ShoppingCart;
 using ShoppingCart.Cache;
 using ShoppingCart.EventFeed;
+using ShoppingCart.Infrastructure;
 using ShoppingCart.ServicesClients;
 using ShoppingCart.ShoppingCart;
 
@@ -23,6 +27,9 @@ namespace Chapter2
                     3,
                     attempt => TimeSpan.FromMinutes(100 * Math.Pow(2,attempt))));
             builder.Services.AddScoped<IEventStore, SqlEventStore>();
+            builder.Services.AddHealthChecks()
+                .AddCheck("LivenessHealthCheck", () => HealthCheckResult.Healthy(), tags: new[] { "liveness" })
+                .AddCheck<DbHealthCheck>(nameof(DbHealthCheck), tags: new[] { "startup" });
             builder.Services.AddControllers();
 
             var app = builder.Build();
@@ -35,14 +42,13 @@ namespace Chapter2
                 app.UseHsts();
             }
 
+            app.UseMiddleware<MonitoringMiddleware>();
+
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
             app.UseRouting();
+            app.UseHealthChecks("/health/live", new HealthCheckOptions { Predicate = x => x.Tags.Contains("liveness") });
+            app.UseHealthChecks("/health/startup", new HealthCheckOptions { Predicate = x => x.Tags.Contains("startup") });
             app.UseEndpoints(endpoints => endpoints.MapControllers());
-
-
-           // app.UseAuthorization();
 
             app.MapRazorPages();
 
