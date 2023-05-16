@@ -10,13 +10,16 @@ namespace ShoppingCart.ShoppingCart
         private readonly IShoppingCartStore _shoppingCartStore;
         private readonly IProductCatalogClient _productCatalog;
         private readonly IEventStore _eventStore;
+        private readonly ILogger<ShoppingCartController> _logger;
         public ShoppingCartController(
             IShoppingCartStore shoppingCartStore,
             IProductCatalogClient productCatalog,
-            IEventStore eventStore) {
+            IEventStore eventStore,
+            ILogger<ShoppingCartController> logger) {
             _shoppingCartStore = shoppingCartStore;
             _productCatalog = productCatalog;
             _eventStore = eventStore;
+            _logger = logger;
         }
 
         [HttpGet("{userId:int}")]
@@ -32,6 +35,10 @@ namespace ShoppingCart.ShoppingCart
             var shoppingCartItems = await _productCatalog.GetShoppingCartItemsAync(productIds);
             shoppingCart.AddItems(shoppingCartItems, _eventStore);
             await _shoppingCartStore.Save(shoppingCart);
+
+            _logger.LogInformation(
+                "Succesfully added products to shopping cart {@productIds}, {@shoppingCart}", productIds, shoppingCart);
+
             return shoppingCart;
         }
 

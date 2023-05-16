@@ -45,8 +45,8 @@ namespace ApiGatewayMock
 
         static async Task Main(string[] args)
         {
-            _host = args.Length > 0 ? args[0] : "https://localhost:7270";
-            _client = GetClient<LoyaltyProgramClient>();
+            _host = args.Length > 0 ? args[0] : "localhost:7270";
+            _client = new LoyaltyProgramClient(_host, new HttpClientFactory());
             var proccesCommand = new Dictionary<char, (string description, Func<string, Task<(bool, HttpResponseMessage)>> handler)>
             {
                 {

@@ -1,23 +1,28 @@
-﻿namespace ShoppingCart.Infrastructure
+﻿using System.Diagnostics;
+
+namespace ShoppingCart.Infrastructure
 {
     public class MonitoringMiddleware
     {
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
+        private readonly ILogger _logger;
 
-        public MonitoringMiddleware(RequestDelegate next)
+        public MonitoringMiddleware(RequestDelegate next, ILogger<MonitoringMiddleware> logger)
         {
-            this.next = next;
+            _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
+            _logger.LogError($"My record {Activity.Current.Id}");
             if (context.Request.Path.Equals("/_monitor/shallow"))
             {
                 await ShallowEndpoint(context);
             }
             else
             {
-                await this.next(context);
+                await _next(context);
             }
         }
 
