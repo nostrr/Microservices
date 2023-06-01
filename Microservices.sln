@@ -35,7 +35,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MiddlewarePackage", "Middle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiddlewarePackage", "MiddlewarePackage\MiddlewarePackage.csproj", "{C980AF88-5670-426C-A4CB-28B8838AD8EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayInterface", "GatewayInterface\GatewayInterface.csproj", "{F63C33DF-512E-49EB-8F97-36128950F38E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatewayInterface", "GatewayInterface\GatewayInterface.csproj", "{F63C33DF-512E-49EB-8F97-36128950F38E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomMiddleware", "CustomMiddleware\CustomMiddleware.csproj", "{B6DD8010-EA38-43CA-8F45-0848467DA8EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,10 @@ Global
 		{F63C33DF-512E-49EB-8F97-36128950F38E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F63C33DF-512E-49EB-8F97-36128950F38E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F63C33DF-512E-49EB-8F97-36128950F38E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6DD8010-EA38-43CA-8F45-0848467DA8EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6DD8010-EA38-43CA-8F45-0848467DA8EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6DD8010-EA38-43CA-8F45-0848467DA8EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6DD8010-EA38-43CA-8F45-0848467DA8EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{59C453D3-5A17-4C9D-B77A-6CB2904718A7} = {BD8CDEF9-B4FF-4335-BD32-02FFC29D51A0}
 		{43D2E12E-5855-4858-94B2-7AAB74F72E60} = {64E456B3-86D9-4AAA-A9D2-22D45D6003B7}
 		{C980AF88-5670-426C-A4CB-28B8838AD8EC} = {D8F27CC4-067F-4F2D-A82B-6CB90F00E395}
+		{B6DD8010-EA38-43CA-8F45-0848467DA8EF} = {D8F27CC4-067F-4F2D-A82B-6CB90F00E395}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4BF6476A-CAFA-44D0-8F59-FC6FD0058EC4}
