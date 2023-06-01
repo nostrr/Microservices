@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text;
 using System.Text.Json;
 
 namespace GatewayInterface.Controllers
@@ -29,7 +30,7 @@ namespace GatewayInterface.Controllers
         [HttpPost("/shoppingcart/{userId}")]
         public async Task<OkResult> AddToCart(int userId, [FromBody] int productId)
         {
-            var response = await _productCatalogClient.PostAsJsonAsync($"/shoppingcart/{userId}/items", new[] { productId });
+            var response = await _shoppingCartClient.PostAsJsonAsync($"/shoppingcart/{userId}/items", new[] { productId });
             response.EnsureSuccessStatusCode();
             return Ok();
         }
@@ -38,8 +39,8 @@ namespace GatewayInterface.Controllers
         public async Task<OkResult> RemoveFromCart(int userId, [FromBody] int productId)
         {
             var request = new HttpRequestMessage(HttpMethod.Delete, $"/shoppingcart/{userId}/items");
-            request.Content = new StringContent(JsonSerializer.Serialize(new[] { productId }));
-            var response = await _productCatalogClient.SendAsync(request);
+            request.Content = new StringContent(JsonSerializer.Serialize(new[] { productId }), Encoding.UTF8, "application/json");
+            var response = await _shoppingCartClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
             return Ok();
         }

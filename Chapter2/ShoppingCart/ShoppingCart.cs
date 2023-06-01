@@ -33,7 +33,7 @@ namespace ShoppingCart.ShoppingCart
 
         public void RemoveItems(int[] productCatalogueIds, IEventStore eventStore)
         {
-            if(_items.RemoveWhere(i => productCatalogueIds.Contains(i.ProductCatalogueId)) != 0)
+            if(_items.RemoveWhere(i => productCatalogueIds.Contains(i.ProductId)) != 0)
             {
                 foreach (var item in _items)
                 {

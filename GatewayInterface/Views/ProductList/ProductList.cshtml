@@ -10,7 +10,8 @@
     <script>
         async function buy(productId) {
             const params = new URLSearchParams(location.search);
-            const rawResponse = await fetch('/shoppingcart/' + params.get('userId'), {
+            const rawResponse = await fetch('/shoppingcart/' + params.get('userId'), 
+            {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -64,7 +65,7 @@
                         {
                             <div class="card-text">
                                 @product.ProductName
-                                <button class="btn btn-link" onclick="removeFromBasket">X</button>
+                                <button class="btn btn-link" onclick="removeFromCart(@product.ProductId)">X</button>
                             </div>
                         }
                     </div>

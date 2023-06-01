@@ -34,7 +34,7 @@ values
         {
             await using var conn = new SqlConnection(CONNECTION_STRING);
             var items = (await conn.QueryAsync(READ_ITEM_SQL, new { UserId = userId })).ToList();
-            return new ShoppingCart(
+            var cart = new ShoppingCart(
                  items.FirstOrDefault()?.ID,
                  userId,
                  items.Select(x =>
@@ -43,6 +43,7 @@ values
                                       x.ProductName,
                                       x.ProductDescription,
                                       new Money(x.Currency, x.Amount))));
+            return cart;
         }
 
         public async Task Save(ShoppingCart shoppingCart)
@@ -65,7 +66,7 @@ values
                               new
                               {
                                   shoppingCartId,
-                                  x.ProductCatalogueId,
+                                  ProductCatalogueId =  x.ProductId,
                                   Productdescription = x.Description,
                                   x.ProductName,
                                   x.Price.Amount,
